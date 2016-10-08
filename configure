@@ -164,6 +164,8 @@ for opt do
   ;;
   --disable-rbd) disable_rbd="yes"
   ;;
+  --disable-s5bd) disable_s5bd="yes"
+  ;;
   --disable-gfapi) disable_gfapi="yes"
   ;;
   --enable-libhdfs) libhdfs="yes"
@@ -1236,11 +1238,27 @@ int main(int argc, char **argv)
   return 0;
 }
 EOF
+disable_rbd="yes"
 if test "$disable_rbd" != "yes"  && compile_prog "" "-lrbd -lrados" "rbd"; then
   LIBS="-lrbd -lrados $LIBS"
   rbd="yes"
 fi
 echo "Rados Block Device engine     $rbd"
+
+##########################################
+# check for s5bd
+s5bd="no"
+cat > $TMPC << EOF
+int main(int argc, char **argv)
+{
+  return 0;
+}
+EOF
+if test "$disable_s5bd" != "yes"  && compile_prog "-I../../S5bd/include -I../../S5manager/include" "-L$S5LIB_DIR -ls5bd -ls5manager -ls5common" "s5bd"; then 
+  LIBS="-ls5bd -ls5common -ls5manager -L$S5LIB_DIR -ls5bd $LIBS"
+  s5bd="yes"
+fi
+echo "S5bd Block Device engine      $s5bd"
 
 ##########################################
 # check for rbd_invaidate_cache()
@@ -1589,6 +1607,9 @@ if test "$ipv6" = "yes" ; then
 fi
 if test "$rbd" = "yes" ; then
   output_sym "CONFIG_RBD"
+fi
+if test "$s5bd" = "yes" ; then 
+  output_sym "CONFIG_S5BD"
 fi
 if test "$rbd_inval" = "yes" ; then
   output_sym "CONFIG_RBD_INVAL"
