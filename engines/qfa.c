@@ -280,7 +280,7 @@ static int fio_qfa_queue(struct thread_data *td, struct io_u *io_u)
 	printf("before queue\n");
 	fflush(stdout);
 	#endif
-	gettimeofday(&task_start, NULL);
+	//gettimeofday(&task_start, NULL);
 
 //	printf("counter=%lld\n", counter++);
 
@@ -332,7 +332,7 @@ RETRY:
 		       io_u->ddir);
 		goto failed_comp;
 	}
-	gettimeofday(&task_end, NULL);
+	//gettimeofday(&task_end, NULL);
 	//timeuse = (task_end.tv_sec - task_start.tv_sec) * 1000000
  //                 + (task_end.tv_usec - task_start.tv_usec);
 	#ifdef DEBUG
