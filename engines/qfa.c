@@ -117,7 +117,7 @@ static void _fio_qfa_disconnect(struct qfa_data *qbd)
 	}
 }
 
-static void _fio_qfa_finish_aiocb(struct qfa_rw_command* io_msg, int complete_status, void* data)
+static void _fio_qfa_finish_aiocb(int complete_status, void* data)
 {
 	struct fio_qfa_iou *fri = data;
 	struct io_u *io_u = fri->io_u;
@@ -272,8 +272,6 @@ static int fio_qfa_queue(struct thread_data *td, struct io_u *io_u)
 	struct qfa_data *qbd = td->io_ops_data;
 	struct fio_qfa_iou *fri = io_u->engine_data;
 	int r = -1;
-	struct timeval task_start;
-	struct timeval task_end;
 	unsigned int read_retry_cnt = 0;
 	unsigned int write_retry_cnt = 0;
 	#ifdef DEBUG
