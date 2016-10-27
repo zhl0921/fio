@@ -96,7 +96,7 @@ static int _fio_qfa_connect(struct thread_data *td)
     struct qfa_data *qbd = td->io_ops_data;
     struct qfa_options *o = td->eo;
 
-    qbd->vol = qfa_open_volume(o->volume_name,o->config_file);
+    qbd->vol = qfa_open_volume(o->volume_name,o->config_file, NULL);
     if(qbd->vol == NULL)
     {
         log_err("qfa open volume[%s]  failed!", o->volume_name);
@@ -399,7 +399,7 @@ static int fio_qfa_setup(struct thread_data *td)
     }
     f = td->files[0];
 
-    temp_vol = qfa_open_volume(o->volume_name, o->config_file);
+    temp_vol = qfa_open_volume(o->volume_name, o->config_file, NULL);
     if (temp_vol == NULL)
     {
         log_err("qfa open volume[%s]  failed!", o->volume_name);
