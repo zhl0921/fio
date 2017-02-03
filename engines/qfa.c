@@ -25,6 +25,7 @@ struct qfa_options {
 	char *volume_name;
 	char *config_file;
 	int  busy_poll;
+	int use_tcp;
 };
 
 static struct fio_option options[] = {
@@ -55,6 +56,16 @@ static struct fio_option options[] = {
 		.def		= "0",
 		.category	= FIO_OPT_C_ENGINE,
 		.group		= FIO_OPT_G_QFA,
+	},
+	{
+		.name = "use_tcp",
+		.lname = "Use TCP",
+		.type = FIO_OPT_BOOL,
+		.help = "Use TCP instead of RDMA",
+		.off1 = offsetof(struct qfa_options, use_tcp),
+		.def = "0",
+		.category = FIO_OPT_C_ENGINE,
+		.group = FIO_OPT_G_QFA,
 	},
 	{
 		.name = NULL,
@@ -96,7 +107,7 @@ static int _fio_qfa_connect(struct thread_data *td)
     struct qfa_data *qbd = td->io_ops_data;
     struct qfa_options *o = td->eo;
 
-    qbd->vol = qfa_open_volume(o->volume_name,o->config_file, NULL);
+    qbd->vol = qfa_open_volume(o->volume_name,o->config_file, NULL, o->use_tcp?TCP:RDMA);
     if(qbd->vol == NULL)
     {
         log_err("qfa open volume[%s]  failed!", o->volume_name);
@@ -302,6 +313,7 @@ RETRY:
 					write_retry_cnt = 0;
 				}
 
+				fprintf(stderr, "AIO write  got EAGAIN, sleep %d*1ms.\n", write_retry_cnt);
 				usleep(1000);
 				goto RETRY;
 			}
@@ -320,6 +332,7 @@ RETRY:
 					printf("AIO read got EAGAIN, sleep %d*1ms.\n", read_retry_cnt);
 					read_retry_cnt = 0;
 				}
+				fprintf(stderr, "AIO read got EAGAIN, sleep %d*1ms.\n", read_retry_cnt);
 				usleep(1000);
 				goto RETRY;
 			}
@@ -399,7 +412,7 @@ static int fio_qfa_setup(struct thread_data *td)
     }
     f = td->files[0];
 
-    temp_vol = qfa_open_volume(o->volume_name, o->config_file, NULL);
+    temp_vol = qfa_open_volume(o->volume_name, o->config_file, NULL,o->use_tcp?TCP:RDMA);
     if (temp_vol == NULL)
     {
         log_err("qfa open volume[%s]  failed!", o->volume_name);
