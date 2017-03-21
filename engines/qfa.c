@@ -388,7 +388,7 @@ static int fio_qfa_setup(struct thread_data *td)
     struct qfa_data *qbd = NULL;
     struct qfa_options *o = td->eo;
     int r;
-    struct qfa_client_volume* temp_vol;
+	struct qfa_volume_info info;
     /* allocate engine specific structure to deal with libs5bd. */
     r = _fio_setup_qfa_data(td, &qbd);
     if (r) {
@@ -412,15 +412,14 @@ static int fio_qfa_setup(struct thread_data *td)
     }
     f = td->files[0];
 
-    temp_vol = qfa_open_volume(o->volume_name, o->config_file, NULL,o->use_tcp?TCP:RDMA);
-    if (temp_vol == NULL)
+    r = qfa_query_volume(o->volume_name, o->config_file, &info);
+    if (r != 0)
     {
-        log_err("qfa open volume[%s]  failed!", o->volume_name);
+        log_err("qfa query volume[%s]  failed!", o->volume_name);
         r = -1;
         goto cleanup;
     }
-    f->real_file_size = temp_vol->size;
-    qfa_close_volume(temp_vol);
+    f->real_file_size = info.size;
     return 0;
 
 cleanup:
