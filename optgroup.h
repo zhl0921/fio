@@ -60,7 +60,7 @@ enum opt_category_group {
         __FIO_OPT_G_MTD,
 	__FIO_OPT_G_HDFS,
 	__FIO_OPT_G_NR,
-    __FIO_OPT_G_QFA,
+    __FIO_OPT_G_QBD,
 
 	FIO_OPT_G_RATE		= (1ULL << __FIO_OPT_G_RATE),
 	FIO_OPT_G_ZONE		= (1ULL << __FIO_OPT_G_ZONE),
@@ -95,7 +95,7 @@ enum opt_category_group {
 	FIO_OPT_G_MTD		= (1ULL << __FIO_OPT_G_MTD),
 	FIO_OPT_G_HDFS		= (1ULL << __FIO_OPT_G_HDFS),
 	FIO_OPT_G_INVALID	= (1ULL << __FIO_OPT_G_NR),
-    FIO_OPT_G_QFA       = (1ULL << __FIO_OPT_G_QFA),
+    FIO_OPT_G_QBD       = (1ULL << __FIO_OPT_G_QBD),
 };
 
 extern const struct opt_group *opt_group_from_mask(uint64_t *mask);

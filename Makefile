@@ -96,7 +96,7 @@ endif
 ifdef CONFIG_RBD
   SOURCE += engines/rbd.c
 endif
-ifdef CONFIG_QFA
+ifdef CONFIG_QBD
   SOURCE += engines/qfa.c
 endif
 ifndef CONFIG_STRSEP

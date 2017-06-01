@@ -168,7 +168,7 @@ for opt do
   ;;
   --disable-rbd-blkin) disable_rbd_blkin="yes"
   ;;
-  --disable-qfa) disable_qfa="yes"
+  --disable-qbd) disable_qbd="yes"
   ;;
   --disable-gfapi) disable_gfapi="yes"
   ;;
@@ -184,9 +184,9 @@ for opt do
   ;;
   --disable-optimizations) disable_opt="yes"
   ;;
-  --qfa-include=*) qfa_inc="$optarg"
+  --qbd-include=*) qbd_inc="$optarg"
   ;;
-  --qfa-lib=*) qfa_lib="$optarg"
+  --qbd-lib=*) qbd_lib="$optarg"
   ;;
   --help)
     show_help="yes"
@@ -215,8 +215,8 @@ if test "$show_help" = "yes" ; then
   echo "--enable-lex           Enable use of lex/yacc for math"
   echo "--disable-shm          Disable SHM support"
   echo "--disable-optimizations Don't enable compiler optimizations"
-  echo "--qfa-include=          Include dir of qfa header file"
-  echo "--qfa-lib=              Library dir of qfa lib"
+  echo "--qbd-include=          Include dir of qbd header file"
+  echo "--qbd-lib=              Library dir of qbd lib"
   exit $exit_val
 fi
 
@@ -1343,19 +1343,19 @@ fi
 echo "Rados Block Device engine     $rbd"
 
 ##########################################
-# check for QFA
-qfa="no"
+# check for QBD
+qbd="no"
 cat > $TMPC << EOF
 int main(int argc, char **argv)
 {
   return 0;
 }
 EOF
-if test "$disable_qfa" != "yes"  && compile_prog "-L$qfa_lib -lneonsan_common" ""; then
-  LIBS="-lneonsan_common -L$qfa_lib $LIBS"
-  qfa="yes"
+if test "$disable_qbd" != "yes"  && compile_prog "-L$qbd_lib -lneonsan_common" ""; then
+  LIBS="-lneonsan_common -L$qbd_lib $LIBS"
+  qbd="yes"
 fi
-echo "QFA Block Device engine      $qfa"
+echo "QBD Block Device engine      $qbd"
 
 ##########################################
 # check for rbd_invaidate_cache()
@@ -1854,10 +1854,10 @@ fi
 if test "$rbd" = "yes" ; then
   output_sym "CONFIG_RBD"
 fi
-if test "$qfa" = "yes" ; then
-  output_sym "CONFIG_QFA"
-  CFLAGS="$CFLAGS -I$qfa_inc"
-  LDFLAGS="$LDFLAGS -L$qfa_lib -lrdmacm -libverbs -lpthread -lneonsan_common -ltoml -lcurl -lzookeeper_mt"
+if test "$qbd" = "yes" ; then
+  output_sym "CONFIG_QBD"
+  CFLAGS="$CFLAGS -I$qbd_inc"
+  LDFLAGS="$LDFLAGS -L$qbd_lib -lrdmacm -libverbs -lpthread -lneonsan_common -ltoml -lcurl -lzookeeper_mt"
 fi
 if test "$rbd_inval" = "yes" ; then
   output_sym "CONFIG_RBD_INVAL"

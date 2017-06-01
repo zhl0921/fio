@@ -1580,10 +1580,10 @@ struct fio_option fio_options[FIO_MAX_OPTS] = {
 			    .help = "Rados Block Device asynchronous IO"
 			  },
 #endif
-#ifdef CONFIG_QFA
+#ifdef CONFIG_QBD
 			  {
-				.ival = "qfa",
-				.help = "Qing Cloud Flash Array Block Device asynchronous IO"
+				.ival = "qbd",
+				.help = "Qing Cloud Block Device asynchronous IO"
 			  },
 #endif
 			  { .ival = "mmap",

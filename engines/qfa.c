@@ -1,5 +1,5 @@
 /*
- *  QFA engine
+ *  QBD engine
  */
 
 #include "../fio.h"
@@ -33,19 +33,19 @@ static struct fio_option options[] = {
 		.name		= "volume",
 		.lname		= "qfa engine volume",
 		.type		= FIO_OPT_STR_STORE,
-		.help		= "Volume name for QFA engine",
+		.help		= "Volume name for QBD engine",
 		.off1		= offsetof(struct qfa_options, volume_name),
 		.category	= FIO_OPT_C_ENGINE,
-		.group		= FIO_OPT_G_QFA,
+		.group		= FIO_OPT_G_QBD,
 	},
 	{
         .name       = "config_file",
         .lname      = "qfa configure file",
         .type       = FIO_OPT_STR_STORE,
-        .help       = "The configure file of QFA store system",
+        .help       = "The configure file of QBD store system",
         .off1       = offsetof(struct qfa_options, config_file),
         .category   = FIO_OPT_C_ENGINE,
-        .group      = FIO_OPT_G_QFA,
+        .group      = FIO_OPT_G_QBD,
     },
 	{
 		.name		= "busy_poll",
@@ -55,7 +55,7 @@ static struct fio_option options[] = {
 		.off1		= offsetof(struct qfa_options, busy_poll),
 		.def		= "0",
 		.category	= FIO_OPT_C_ENGINE,
-		.group		= FIO_OPT_G_QFA,
+		.group		= FIO_OPT_G_QBD,
 	},
 	{
 		.name = "use_tcp",
@@ -65,7 +65,7 @@ static struct fio_option options[] = {
 		.off1 = offsetof(struct qfa_options, use_tcp),
 		.def = "0",
 		.category = FIO_OPT_C_ENGINE,
-		.group = FIO_OPT_G_QFA,
+		.group = FIO_OPT_G_QBD,
 	},
 	{
 		.name = NULL,
@@ -458,7 +458,7 @@ static int fio_qfa_io_u_init(struct thread_data *td, struct io_u *io_u)
 }
 
 static struct ioengine_ops ioengine = {
-	.name			= "qfa",
+	.name			= "qbd",
 	.version		= FIO_IOOPS_VERSION,
 	.setup			= fio_qfa_setup,
 	.init			= fio_qfa_init,
